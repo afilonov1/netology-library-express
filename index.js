@@ -1,73 +1,27 @@
 const express = require("express");
 
-const { v4: uuid } = require('uuid');
+const userRoute = require("./routes/user");
 
-const booksRoute = "/api/books/";
+const errorHandler = require("./routes/404");
 
-const book = {
-  id: "string",
-  title: "string",
-  description: "string",
-  authors: "string",
-  favorite: "string",
-  fileCover: "string",
-  fileName: "string"
-};
-const books = [book, {...book, id: "string2"}];
-
+const booksRoute = require("./routes/books");
+const error404 = require("./middleware/error404");
 
 const app = express();
 app.use(express.json())
+console.log(__dirname);
+// app.use("/api/books", express.static(__dirname + "/public/img"));
+app.use("/api/user", userRoute);
+// app.use(errorHandler);
 
-app.post("/api/user/login", (req, res) => {
-  res.statusCode = 201;
-  res.send({ id: 1, mail: "test@mail.ru" });
-})
-app.get(booksRoute, (req, res) => {
-  res.send(books);
-});
-app.get(`${booksRoute}:id`, (req, res) => {
-  const book = books.find(item => item.id === req.params.id);
-  if (book) {
-    res.send(book);
-  } else {
-    res.sendStatus(404);
-  }
-});
-
-app.post(booksRoute, (req, res) => {
-  const reqBook = req.body;
-  const newBook = {...(reqBook || []), id: uuid()};
-
-  books.push(newBook);
-  res.send(newBook);
-});
+app.use("/api/books/", booksRoute);
 
 
-app.put(`${booksRoute}:id`, (req, res) => {
-  const itemId = req.params.id;
-  const reqBook = req.body;
-  const indexOfBookInStore = books.findIndex(item => item.id  === itemId);
+// app.use(function(err, req, res, next) {
+//   console.log(111);
+//   res.status(500).send('Something broke!');
+// });
+app.use(error404);
 
-  if (indexOfBookInStore !== -1) {
-    books[indexOfBookInStore] = {
-      ...books[indexOfBookInStore],
-      ...reqBook,
-    }
-    res.send(books[indexOfBookInStore]);
-  } else {
-    res.sendStatus(404);
-  }
-});
-app.delete(`${booksRoute}:id`, (req, res) => {
-  const itemId = req.params.id;
-  const indexOfBookInStore = books.findIndex(item => item.id  === itemId);
-  if (indexOfBookInStore !== -1) {
-    books.splice(indexOfBookInStore, 1);
-    res.send("OK");
-  } else {
-    res.sendStatus(404);
-  }
-})
-
-app.listen(3000)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT);
