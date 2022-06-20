@@ -22,21 +22,29 @@ function getAllJSONBooks() {
 
 router.get("/", (req, res) => {
     const books = getAllJSONBooks();
-    res.json(books);
+    // res.json(books);
+    res.render("books/index", {books});
 });
-router.get(`/:id`, (req, res) => {
+router.get(`/add`, (req, res) => {
+    res.render("books/add");
+});
+router.get(`/update/:id`, (req, res) => {
     const books = getAllJSONBooks();
-    const book = books.find(item => item.id === req.params.id);
+    const {id} = req.params;
+    const book = books.find(item => item.id === id);
     if (book) {
-        res.json(book);
+        res.render("books/update", {book});
     } else {
-        res.sendStatus(404);
+        res.redirect("/api/books");
     }
 });
 
-router.post("/", 
+
+router.get("/create", 
     fileMulter.single("book"),
     (req, res) => {
+        const reqBook = req.query;
+        
         const bookId = req.file?.filename?.slice(0, -5);
         if (req.file) {
             const {path} = req.file;
@@ -52,10 +60,10 @@ router.post("/",
                 fileBook: data.fileBook || ""
             };
             fs.writeFileSync(path, JSON.stringify(newBook, null, 2));
-            res.json({path});
+            // res.json({path});
+            res.redirect("/api/books/overview/" + bookId);
             return;
         }
-        const reqBook = req.body;
         const newBook = {
             id: bookId || uuid(),
             title: reqBook.title || "",
@@ -66,21 +74,31 @@ router.post("/",
             fileName: reqBook.fileName || "",
             fileBook: reqBook.fileBook || ""
         };
-        console.log(path.join(__dirname, "../../public/books", newBook.id + ".json"));
         fs.writeFile(path.join(__dirname, "../../public/books", newBook.id + ".json"), 
             JSON.stringify(newBook, null, 2), { flag: 'a+' }, err => {});
 
-        res.json(newBook);
+        // res.json(newBook);
+        res.redirect("/api/books/overview/" + newBook.id);
     }
 );
 
+router.get(`/overview/:id`, (req, res) => {
+    const books = getAllJSONBooks();
+    const book = books.find(item => item.id === req.params.id);
+    if (book) {
+        // res.json(book);
+        res.render("books/overview", {book});
+    } else {
+        res.sendStatus(404);
+    }
+});
 
-router.put(`/:id`, 
+router.get(`/updaterequest/:id`, 
     rewriteFileMulter.single("book"),
     (req, res) => {
         const books = getAllJSONBooks();
         const itemId = req.params.id;
-        const reqBook = req.body || {};
+        const reqBook = req.query || {};
         const indexOfBookInStore = books.findIndex(item => item.id  === itemId);
         console.log(books[indexOfBookInStore]);
         const prevBook = books[indexOfBookInStore] || [];
@@ -100,7 +118,8 @@ router.put(`/:id`,
                     fileBook: data.fileBook || ""
                 };
                 fs.writeFileSync(path, JSON.stringify(newBook, null, 2));
-                res.json({path});
+                // res.json({path});
+                res.redirect("/api/books/overview" + itemId);
                 return;
             }
             const newBook = {
@@ -116,22 +135,24 @@ router.put(`/:id`,
             console.log(newBook);
             fs.writeFile(path.join(__dirname, "../../public/books", newBook.id + ".json"), 
                 JSON.stringify(newBook, null, 2), {}, err => {});
-            res.json(newBook);
+            // res.json(newBook);
+            res.redirect("/api/books/overview/" + newBook.id);
         } else {
             res.sendStatus(404);
         }
     }
 );
-router.delete(`/:id`, (req, res) => {
+router.post(`/delete/:id`, (req, res) => {
     const books = getAllJSONBooks();
     const itemId = req.params.id;
     const indexOfBookInStore = books.findIndex(item => item.id  === itemId);
     if (indexOfBookInStore !== -1) {
         fs.unlinkSync(path.join(__dirname, "../../public/books", itemId + ".json"));
-        res.json("OK");
+        // res.json("OK");
     } else {
-        res.sendStatus(404);
+        // res.sendStatus(404);
     }
+    res.redirect("/api/books");
 })
 
 router.get(`/:id/download`, (req, res) => {

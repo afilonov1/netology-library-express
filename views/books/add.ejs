@@ -1,0 +1,49 @@
+<%- include("../helpers/layout-start") %>
+    <h1>Добавить книгу</h1>
+    <form action="/api/books/create" method="get">
+        <div class="mb-3">
+            <label class="form-label">
+                title
+                <input type="text" name="title" class="form-control" required>
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                description
+                <input type="text" name="description" class="form-control" required>
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                authors
+                <input type="text" name="authors" class="form-control" required>
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                favorite
+                <input type="text" name="favorite" class="form-control" required>
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                fileCover
+                <input type="text" name="fileCover" class="form-control" required>
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                fileName
+                <input type="text" name="fileName" class="form-control" required>
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                fileBook
+                <input type="text" name="fileBook" class="form-control" required>
+            </label>
+        </div>
+        <button class="btn btn-primary">Добавить</button>
+    </form>
+
+<%- include("../helpers/layout-end") %>
