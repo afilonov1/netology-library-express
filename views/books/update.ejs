@@ -1,0 +1,63 @@
+<%- include("../helpers/layout-start") %>
+    <h1>Обновить книгу</h1>
+    <form action="/api/books/updaterequest/<%= book.id %>" method="get">
+        <div class="mb-3">
+            <label class="form-label">
+                title
+                <input type="text" name="title" class="form-control"
+                    value=<%= book.title %> required
+                >
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                description
+                <input type="text" name="description" class="form-control"
+                    value=<%= book.description %> required
+                >
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                authors
+                <input type="text" name="authors" class="form-control"
+                    value=<%= book.authors %> required
+                >
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                favorite
+                <input type="text" name="favorite" class="form-control"
+                    value=<%= book.favorite %> required
+                >
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                fileCover
+                <input type="text" name="fileCover" class="form-control"
+                    value=<%= book.fileCover %> required
+                >
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                fileName
+                <input type="text" name="fileName" class="form-control"
+                    value=<%= book.fileName %> required
+                >
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                fileBook
+                <input type="text" name="fileBook" class="form-control"
+                    value=<%= book.fileBook %> required
+                >
+            </label>
+        </div>
+        <button class="btn btn-primary">Изменить</button>
+    </form>
+
+<%- include("../helpers/layout-end") %>

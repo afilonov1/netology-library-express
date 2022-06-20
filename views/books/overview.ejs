@@ -1,0 +1,59 @@
+<%- include("../helpers/layout-start") %>
+    <h1>Книга <%= book.title %></h1>
+    <div class="mb-3">
+        <label class="form-label">
+            title
+            <input type="text" name="title" class="form-control"
+                disabled value=<%= book.title %>
+            >
+        </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">
+            description
+            <input type="text" name="description" class="form-control"
+                disabled value=<%= book.description %>
+            >
+        </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">
+            authors
+            <input type="text" name="authors" class="form-control"
+                disabled value=<%= book.authors %>
+            >
+        </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">
+            favorite
+            <input type="text" name="favorite" class="form-control"
+                disabled value=<%= book.favorite %>
+            >
+        </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">
+            fileCover
+            <input type="text" name="fileCover" class="form-control"
+                disabled value=<%= book.fileCover %>
+            >
+        </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">
+            fileName
+            <input type="text" name="fileName" class="form-control"
+                disabled value=<%= book.fileName %>
+            >
+        </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">
+            fileBook
+            <input type="text" name="fileBook" class="form-control"
+                disabled value=<%= book.fileBook %>
+            >
+        </label>
+    </div>
+<%- include("../helpers/layout-end") %>
