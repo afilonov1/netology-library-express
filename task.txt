@@ -1,0 +1,30 @@
+Задание 1
+1. docker pull busybox
+2. docker run -i -t busybox ping -c 7 netology.ru
+   docker rename unruffled_elbakyan pinger
+3. docker ps -a
+4. docker logs pinger
+5. docker start pinger
+6. docker ps -a
+7. docker logs pinger
+8. 2 запуска PING по 7 пакетов
+9. docker rm pinger
+10. docker rmi busybox
+
+Задание 2
+1. docker pull node:15.14
+2. docker run --name mynode --env NAME=Alex --env SURNAME=Filonov -i -t node:15.14
+3. console.log(`Привет, ${process.env.NAME} ${process.env.SURNAME}!`)
+4. docker stop mynode
+5. docker rmi -f node:15.14
+
+Задание 3
+1. docker pull node:15.14
+2. docker run -it --name first_node -v "$(pwd)"/data:/var/first/data -d node:15.14
+3. docker run -it --name second_node -v "$(pwd)"/data:/var/second/data -d node:15.14
+4. docker exec first_node touch /var/first/data/123 
+5. mkdir fromHost
+6. docker exec second_node ls /var/second/data
+7. docker stop first_node second_node
+8. docker rm first_node second_node
+9. docker rmi node:15.14
