@@ -81,13 +81,36 @@ router.get("/create",
         res.redirect("/api/books/overview/" + newBook.id);
     }
 );
+const COUNTER_SERVICE_URL = process.env.COUNTER_SERVICE_URL || "http://localhost:3000";
+async function incrCounter(id) {
+    try {
+        await fetch(`${COUNTER_SERVICE_URL}/counter/${id}/incr`, { method: "POST" });
+    } catch {
+        console.log("unable INCR");
+    }
+}
+async function getCounter(id) {
+    let result = {};
+    try {
+        const response = await fetch(`${COUNTER_SERVICE_URL}/counter/${id}`);
+        const result = await response.json();
+        return result.status ? result.count : 0;
 
-router.get(`/overview/:id`, (req, res) => {
+    } catch (e) {
+        console.log("unable get CNT");
+    }
+    return 1;
+}
+router.get(`/overview/:id`, async (req, res) => {
+    const { id } = req.params;
     const books = getAllJSONBooks();
-    const book = books.find(item => item.id === req.params.id);
+    const book = books.find(item => item.id === id);
+    
     if (book) {
+        await incrCounter(id);
+        const viewCount = await getCounter(id);
         // res.json(book);
-        res.render("books/overview", {book});
+        res.render("books/overview", {book, viewCount});
     } else {
         res.sendStatus(404);
     }
