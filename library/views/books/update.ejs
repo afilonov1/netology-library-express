@@ -1,6 +1,6 @@
 <%- include("../helpers/layout-start") %>
     <h1>Обновить книгу</h1>
-    <form action="/api/books/updaterequest/<%= book.id %>" method="get">
+    <form action="/api/books/updaterequest/<%= book._id %>" method="get">
         <div class="mb-3">
             <label class="form-label">
                 title
@@ -46,14 +46,6 @@
                 fileName
                 <input type="text" name="fileName" class="form-control"
                     value=<%= book.fileName %> required
-                >
-            </label>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">
-                fileBook
-                <input type="text" name="fileBook" class="form-control"
-                    value=<%= book.fileBook %> required
                 >
             </label>
         </div>
