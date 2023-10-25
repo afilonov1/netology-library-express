@@ -23,6 +23,9 @@ services:
       - ./library:/app
     ports:
       - 80:3002
+      - 3003:3003
+      - 3000:3000
+      - 3002:3002
     environment:
       - PORT=3002
       - COUNTER_SERVICE_URL=http://counter:3001

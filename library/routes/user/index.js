@@ -4,7 +4,7 @@ const passport = require('passport');
 
 require('../../strategies/local');
 
-const db = [{id: 1, username: "admin", password: "admin", displayName: "Anton", email: "testmail"}];
+const db = require("../../db");
 
 passport.serializeUser((user, cb) => {
     cb(null, user.id)

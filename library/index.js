@@ -2,6 +2,8 @@ const express = require("express");
 const session = require('express-session')
 const mongoose = require("mongoose");
 const passport = require('passport')
+const socketIO = require("socket.io");
+const http = require('http');
 
 const userRoute = require("./routes/user");
 const errorHandler = require("./routes/404");
@@ -9,7 +11,12 @@ const booksRoute = require("./routes/books");
 const indexRoute = require("./routes/indexRoute");
 const error404 = require("./middleware/error404");
 
+
+
 const app = express();
+const server = http.Server(app);
+const io = socketIO(server);
+
 app.use(express.json())
 app.use(express.urlencoded());
 app.use(session({ secret: 'SECRET'}));
@@ -30,7 +37,7 @@ app.use(error404);
 async function start(PORT, urlDB) {
   try {
     await mongoose.connect(urlDB);
-    app.listen(PORT);
+    server.listen(PORT);
     console.log('server started at port', PORT);
   } catch (e) {
     console.log(e);
@@ -40,3 +47,22 @@ async function start(PORT, urlDB) {
 const PORT = process.env.PORT || 3001;
 const urlDB = process.env.urlDB;
 start(PORT, urlDB);
+
+
+io.on('connection', (socket) => {
+  const {id} = socket;
+  console.log(`Socket connected: ${id}`);
+  console.log(socket.handshake)
+  const {roomName} = socket.handshake.query;
+  console.log(`Socket roomName: ${roomName}`);
+  socket.join(roomName);
+  socket.on('message-to-room', (msg) => {
+      msg.type = `room: ${roomName}`;
+      socket.to(roomName).emit('message-to-room', msg);
+      socket.emit('message-to-room', msg);
+  });
+
+  socket.on('disconnect', () => {
+      console.log(`Socket disconnected: ${id}`);
+  });
+});

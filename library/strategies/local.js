@@ -1,7 +1,7 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
-const db = [{id: 1, username: "admin", password: "admin", displayName: "Anton", email: "testmail"}];
+const db = require("../db");
 
 passport.use(
   new LocalStrategy(
