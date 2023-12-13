@@ -1,4 +1,4 @@
-const express = require("express");
+import express, { Express } from "express";
 const session = require('express-session')
 const mongoose = require("mongoose");
 const passport = require('passport')
@@ -13,7 +13,7 @@ const error404 = require("./middleware/error404");
 
 
 
-const app = express();
+const app: Express = express();
 const server = http.Server(app);
 const io = socketIO(server);
 
@@ -30,11 +30,10 @@ app.get("/123", (req, res) => {
   res.sendStatus(200);
 })
 app.use("/api/books", booksRoute);
-
 app.use(error404);
 
 
-async function start(PORT, urlDB) {
+async function start(PORT: number, urlDB: string) {
   try {
     await mongoose.connect(urlDB);
     server.listen(PORT);
@@ -44,7 +43,7 @@ async function start(PORT, urlDB) {
   }
 }
 
-const PORT = process.env.PORT || 3001;
+const PORT = +process.env.PORT || 3001;
 const urlDB = process.env.urlDB;
 start(PORT, urlDB);
 
